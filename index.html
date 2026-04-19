@@ -2277,9 +2277,9 @@ ${statsText || '特になし'}
                                               onDrop={(e) => handleMenuDrop(e, group.id, tab.id)}
                                               onDragEnd={handleMenuDragEnd}
                                               onClick={() => { setActiveTab(tab.id); setIsTabMenuOpen(false); }} 
-                                              className={`w-full text-left px-3 py-3 rounded-lg border-2 transition-all flex items-center justify-between text-sm ${menuDraggedItem?.id === tab.id ? 'opacity-50 border-dashed bg-white' : menuDragOverItem === tab.id ? 'border-blue-500 bg-blue-100 scale-[1.02] shadow-md z-10' : isActive ? 'bg-blue-50 border-blue-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50 shadow-sm'}`}
+                                              className={`w-full text-left px-3 py-3 rounded-lg border-2 transition-all flex items-center justify-between text-sm ${menuDraggedItem?.id === tab.id ? 'opacity-50 border-dashed bg-white' : menuDragOverItem === tab.id ? 'border-blue-500 bg-blue-100 scale-[1.02] shadow-md z-10' : isActive ? 'bg-blue-50 border-blue-400 shadow-sm' : 'bg-green-50 border-green-200 hover:bg-green-100 shadow-sm'}`}
                                             >
-                                              <span className={`font-bold truncate ${isActive ? 'text-blue-800' : 'text-gray-700'}`}>{tab.label}</span>
+                                              <span className={`font-bold truncate ${isActive ? 'text-blue-800' : 'text-green-800'}`}>{tab.label}</span>
                                               <span className="text-gray-300 cursor-grab px-1 hover:text-gray-500" title="ドラッグして並べ替え">≡</span>
                                             </button>
                                           );
@@ -2304,9 +2304,9 @@ ${statsText || '特になし'}
                                   <button 
                                     key={tab.id} 
                                     onClick={() => { setActiveTab(tab.id); setIsTabMenuOpen(false); }} 
-                                    className={`w-full text-left px-3 py-3 rounded-lg border-2 transition-all flex items-center justify-between text-sm ${isActive ? 'bg-blue-50 border-blue-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50 shadow-sm'}`}
+                                    className={`w-full text-left px-3 py-3 rounded-lg border-2 transition-all flex items-center justify-between text-sm ${isActive ? 'bg-blue-50 border-blue-400 shadow-sm' : 'bg-green-50 border-green-200 hover:bg-green-100 shadow-sm'}`}
                                   >
-                                    <span className={`font-bold truncate ${isActive ? 'text-blue-800' : 'text-gray-700'}`}>{tab.label}</span>
+                                    <span className={`font-bold truncate ${isActive ? 'text-blue-800' : 'text-green-800'}`}>{tab.label}</span>
                                   </button>
                                 );
                               })}
