@@ -171,7 +171,7 @@
 
     const createInitialGrid = () => Array(24).fill(null);
 
-    const createCoverData = () => ({ schoolName: '', title: 'キャリアノート', subtitle: '', currentGrade: '', coverImageUrl: null, enterYear: '', enterMonth: '', graduateYear: '', graduateMonth: '', themeColor: DEFAULT_COLORS.cover, updatedAt: null });
+    const createCoverData = () => ({ schoolName: '', title: 'キャリアノート', subtitle: '名前', currentGrade: '１', coverImageUrl: null, enterYear: '令和　　', enterMonth: '４', graduateYear: '令和　　', graduateMonth: '３', themeColor: DEFAULT_COLORS.cover, updatedAt: null });
     const createTargetData = (label = '目標（高１・１学期）') => ({ tabLabel: label, title: '夢の実現に向けて～目標設定シート～', term: '一学期', name: '', q1: '', q2: '', q3: [{ id: generateId(), text: '' }], q4: '', q5: '', themeColor: DEFAULT_COLORS.target1, fontSizes: {}, updatedAt: null });
     const createTrainingData = (label = '実習（高１・６月）') => ({ tabLabel: label, title: '実習記録', companyName: '', period: '', startDate: '', endDate: '', daysCount: '', activities: '', goals: [{ id: Date.now(), text: '', evaluation: 0 }], comment: '', reflection: '', themeColor: DEFAULT_COLORS.training1, fontSizeMode: 'medium', fontSizes: {}, updatedAt: null });
     const createAwardsData = (label = '受賞歴①') => ({ tabLabel: label, records: [{ id: Date.now(), date: '', title: '', description: '' }], themeColor: DEFAULT_COLORS.docs1, updatedAt: null });
