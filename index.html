@@ -1047,7 +1047,7 @@
     // --- Main App Component ---
     const App = () => {
       const [isAppAuthenticated, setIsAppAuthenticated] = useState(() => {
-        return sessionStorage.getItem('appAuth') === 'true';
+        return localStorage.getItem('appAuth') === 'true';
       });
       const [appAuthPassword, setAppAuthPassword] = useState('');
       const [appAuthError, setAppAuthError] = useState('');
@@ -1148,9 +1148,9 @@
 
       const handleAppAuthSubmit = (e) => {
         if (e) e.preventDefault();
-        if (appAuthPassword === 'kirarist') {
+        if (appAuthPassword === 'kirari') {
           setIsAppAuthenticated(true);
-          sessionStorage.setItem('appAuth', 'true');
+          localStorage.setItem('appAuth', 'true');
         } else {
           setAppAuthError('パスワードが違います');
         }
@@ -2241,6 +2241,9 @@ ${statsText || '特になし'}
                 <span className="text-xs font-bold text-gray-400 pl-1">{syncStatus}</span>
               </div>
               <div className="flex items-center gap-2">
+                <button type="button" onClick={() => window.location.reload()} className="px-3 sm:px-4 py-2 bg-white hover:bg-gray-100 text-gray-800 rounded-lg font-bold text-xs sm:text-sm flex items-center gap-1 shadow-sm border border-gray-300 active:scale-95 transition-transform" title="アプリを再読み込み">
+                  🔄 更新
+                </button>
                 <div className="relative" ref={restoreMenuRef}>
                   <button onClick={() => setIsRestoreMenuOpen(!isRestoreMenuOpen)} className="px-3 sm:px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg font-bold text-xs sm:text-sm flex items-center gap-1 shadow-sm border border-gray-300 active:scale-95 transition-transform">
                     📂 復元
@@ -2295,13 +2298,13 @@ ${statsText || '特になし'}
                                 const hasAddBtn = group.id !== 'profile';
                                 return (
                                   <div key={group.id} className="border-b border-gray-200 last:border-b-0">
-                                    <div onClick={() => toggleGroup(group.id)} className="px-4 py-3 bg-gray-100 text-gray-700 font-bold text-sm flex justify-between items-center cursor-pointer hover:bg-gray-200 transition-colors">
+                                    <div onClick={() => toggleGroup(group.id)} className={`px-4 py-3 font-bold text-sm flex justify-between items-center cursor-pointer transition-colors ${openMenuGroups[group.id] ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
                                       <span>{group.title}</span>
                                       <div className="flex items-center gap-3">
                                         {hasAddBtn && (
                                           <button onClick={(e) => { e.stopPropagation(); openNewTabModal(group.id); }} className="text-blue-600 bg-blue-50 border border-blue-200 px-3 py-1 rounded text-xs hover:bg-blue-100 font-black shadow-sm active:scale-95 transition-transform">＋追加</button>
                                         )}
-                                        <span className="text-gray-400 text-xs">{openMenuGroups[group.id] ? '▼' : '▶'}</span>
+                                        <span className={`${openMenuGroups[group.id] ? 'text-green-600' : 'text-gray-400'} text-xs`}>{openMenuGroups[group.id] ? '▼' : '▶'}</span>
                                       </div>
                                     </div>
                                     {openMenuGroups[group.id] && (
@@ -2881,7 +2884,7 @@ ${statsText || '特になし'}
                         <span className="font-bold text-gray-700 w-12 shrink-0">終了:</span>
                         <input type="tel" ref={endYRef} value={periodModal.endY} onChange={e => handleYMDChange(e, 'endY', endMRef, 4)} onKeyDown={e => handleYMDKeyDown(e, endMRef)} onFocus={() => setPeriodModal(p => ({...p, activeInput: 'end'}))} className={`w-16 border-2 rounded p-1.5 text-center font-bold outline-none ${periodModal.activeInput === 'end' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}`} placeholder="年" />
                         <span className="font-bold text-gray-500">年</span>
-                        <input type="tel" ref={endMRef} value={periodModal.endM} onChange={e => handleYMDChange(e, 'endM', endDRef, 2)} onKeyDown={e => handleYMDKeyDown(e, endDRef)} onFocus={() => setPeriodModal(p => ({...p, activeInput: 'end'}))} className={`w-12 border-2 rounded p-1.5 text-center font-bold outline-none ${periodModal.activeInput === 'end' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}`} placeholder="月" />
+                        <input type="tel" ref={endMRef} value={periodModal.endM} onChange={e => handleYMDChange(e, 'endM', endDRef, 2)} onKeyDown={e => handleYMDKeyDown(e, endMRef)} onFocus={() => setPeriodModal(p => ({...p, activeInput: 'end'}))} className={`w-12 border-2 rounded p-1.5 text-center font-bold outline-none ${periodModal.activeInput === 'end' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}`} placeholder="月" />
                         <span className="font-bold text-gray-500">月</span>
                         <input type="tel" ref={endDRef} value={periodModal.endD} onChange={e => handleYMDChange(e, 'endD', daysRef, 2)} onKeyDown={e => handleYMDKeyDown(e, endDRef)} onFocus={() => setPeriodModal(p => ({...p, activeInput: 'end'}))} className={`w-12 border-2 rounded p-1.5 text-center font-bold outline-none ${periodModal.activeInput === 'end' ? 'border-blue-500 bg-blue-50' : 'border-gray-300'}`} placeholder="日" />
                         <span className="font-bold text-gray-500">日</span>
