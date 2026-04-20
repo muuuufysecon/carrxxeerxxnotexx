@@ -171,14 +171,14 @@
 
     const createInitialGrid = () => Array(24).fill(null);
 
-    const createCoverData = () => ({ schoolName: '', title: 'キャリアノート', subtitle: '', currentGrade: '', coverImageUrl: null, enterYear: '', enterMonth: '', graduateYear: '', graduateMonth: '', themeColor: DEFAULT_COLORS.cover, updatedAt: null });
+    const createCoverData = () => ({ schoolName: '秋田県立秋田きらり支援学校　高等部', title: 'キャリアノート', subtitle: '', currentGrade: '', coverImageUrl: null, enterYear: '', enterMonth: '', graduateYear: '', graduateMonth: '', themeColor: DEFAULT_COLORS.cover, updatedAt: null });
     const createTargetData = (label = '目標（高１・１学期）') => ({ tabLabel: label, title: '夢の実現に向けて～目標設定シート～', term: '一学期', name: '', q1: '', q2: '', q3: [{ id: generateId(), text: '' }], q4: '', q5: '', themeColor: DEFAULT_COLORS.target1, fontSizes: {}, updatedAt: null });
     const createTrainingData = (label = '実習（高１・６月）') => ({ tabLabel: label, title: '実習記録', companyName: '', period: '', startDate: '', endDate: '', daysCount: '', activities: '', goals: [{ id: Date.now(), text: '', evaluation: 0 }], comment: '', reflection: '', themeColor: DEFAULT_COLORS.training1, fontSizeMode: 'medium', fontSizes: {}, updatedAt: null });
     const createAwardsData = (label = '受賞歴①') => ({ tabLabel: label, records: [{ id: Date.now(), date: '', title: '', description: '' }], themeColor: DEFAULT_COLORS.docs1, updatedAt: null });
     const createInitialData = (defaultColor) => ({ basicStats: JSON.parse(JSON.stringify(INITIAL_BASIC_STATS)), abilitiesGrid: createInitialGrid(), avatarUrl: null, themeColor: defaultColor, profile: { name: '', team: '', country: 'Japan', number: '', company: '', role: '', classGoal: '', years: '', stars: '' }, fontSizeMode: 'medium', fontSizes: { stats: 'xlarge', profileName: 'medium', abilities: 'large' }, updatedAt: null });
 
     const createBlankBasicStats = () => [{ id: 'stat1', name: '', records: [{ month: '4月', value: 0 }, { month: '9月', value: 0 }, { month: '3月', value: 0 }] }, { id: 'stat2', name: '', records: [{ month: '4月', value: 0 }, { month: '9月', value: 0 }, { month: '3月', value: 0 }] }, { id: 'stat3', name: '', records: [{ month: '4月', value: 0 }, { month: '9月', value: 0 }, { month: '3月', value: 0 }] }];
-    const createBlankCoverData = (prev) => ({ schoolName: '', title: '', subtitle: '', currentGrade: '', coverImageUrl: null, enterYear: '', enterMonth: '', graduateYear: '', graduateMonth: '', themeColor: prev.themeColor });
+    const createBlankCoverData = (prev) => ({ schoolName: '秋田県立秋田きらり支援学校　高等部', title: '', subtitle: '', currentGrade: '', coverImageUrl: null, enterYear: '', enterMonth: '', graduateYear: '', graduateMonth: '', themeColor: prev.themeColor });
     const createBlankTargetData = (prev) => ({ tabLabel: prev.tabLabel, title: '夢の実現に向けて～目標設定シート～', term: '一学期', name: '', q1: '', q2: '', q3: [{ id: generateId(), text: '' }], q4: '', q5: '', themeColor: prev.themeColor, fontSizeMode: prev.fontSizeMode, fontSizes: prev.fontSizes });
     const createBlankTrainingData = (prev) => ({ tabLabel: prev.tabLabel, title: '実習記録', companyName: '', period: '', startDate: '', endDate: '', daysCount: '', activities: '', goals: [{ id: Date.now(), text: '', evaluation: 0 }], comment: '', reflection: '', themeColor: prev.themeColor, fontSizeMode: prev.fontSizeMode, fontSizes: prev.fontSizes });
     const createBlankAwardsData = (prev) => ({ tabLabel: prev.tabLabel, records: [], themeColor: prev.themeColor });
@@ -188,7 +188,7 @@
 
     const APP_VERSION = "v3.0.3";
 
-    const compressImageTo35KB = (img) => {
+    const compressImageTo100KB = (img) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       let width = img.width, height = img.height, max_dim = 800;
@@ -207,7 +207,7 @@
       let attempts = 0;
       const MAX_ATTEMPTS = 15;
 
-      while (sizeKB > 35 && attempts < MAX_ATTEMPTS) {
+      while (sizeKB > 100 && attempts < MAX_ATTEMPTS) {
         if (quality > 0.3) {
           quality -= 0.1;
         } else {
@@ -263,7 +263,7 @@
       const handleRemoveItem = (id) => onItemsChange(items.filter(item => item.id !== id));
       return (
         <div className="relative pt-4 w-full mt-4 sm:mt-6 group">
-          {!isExporting && (<div className="absolute -top-1 right-2 z-20 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={fontSizeMode} onChange={(v) => onFontSizeChange(field, v)} /></div>)}
+          {!isExporting && (<div className="absolute -top-1 right-2 z-20 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={fontSizeMode} onChange={(v) => onFontSizeChange(field, v)} /></div>)}
           <div className={`absolute top-0 left-4 sm:left-8 px-5 sm:px-8 ${bgColor} border-[3px] border-gray-800 rounded-full ${isExporting ? 'pt-0 pb-2' : 'py-1'} z-10 font-bold text-gray-900 shadow-sm flex items-center justify-start text-lg sm:text-xl tracking-widest`}>{num} {title}</div>
           <div className={`border-[3px] border-gray-800 rounded-3xl p-4 sm:p-6 pt-10 sm:pt-12 pb-14 bg-white shadow-sm relative z-0 flex flex-col gap-3 min-h-[10rem]`}>
             {items.map((item) => (
@@ -292,7 +292,7 @@
       const fontSizeClass = FONT_SIZES[fontSizeMode || 'medium'];
       return (
         <div className="relative pt-4 w-full mt-4 sm:mt-6 group">
-          {!isExporting && (<div className="absolute -top-1 right-2 z-20 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={fontSizeMode} onChange={(v) => onFontSizeChange(field, v)} /></div>)}
+          {!isExporting && (<div className="absolute -top-1 right-2 z-20 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={fontSizeMode} onChange={(v) => onFontSizeChange(field, v)} /></div>)}
           <div className={`absolute top-0 left-4 sm:left-8 px-5 sm:px-8 ${bgColor} border-[3px] border-gray-800 rounded-full ${isExporting ? 'pt-0 pb-2' : 'py-1'} z-10 font-bold text-gray-900 shadow-sm flex items-center justify-start text-lg sm:text-xl tracking-widest`}>{num} {title}</div>
           <div className={`border-[3px] border-gray-800 rounded-3xl p-4 sm:p-6 pt-10 sm:pt-12 bg-white shadow-sm relative z-0 flex flex-col ${heightClass || 'h-48 sm:h-56'}`}>
             {isExporting ? (<div className={`w-full h-full whitespace-pre-wrap overflow-hidden font-medium leading-relaxed text-gray-800 ${fontSizeClass}`}>{value}</div>) : (
@@ -579,7 +579,7 @@
           <div className="flex flex-col gap-4 mt-2 pb-8">
             <div className="flex flex-col gap-4 mb-2">
               <div className="w-full flex items-center border-b-[3px] border-gray-800 pb-1 relative group">
-                {!isExporting && <div className="absolute -top-6 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('companyName')} onChange={(v) => onFontSizeChange('companyName', v)} /></div>}
+                {!isExporting && <div className="absolute -top-6 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('companyName')} onChange={(v) => onFontSizeChange('companyName', v)} /></div>}
                 <span className="font-bold text-gray-900 mr-2 whitespace-nowrap">実習先:</span>
                 {isExporting ? 
                   <div className={`w-full font-bold text-gray-900 ${FONT_SIZES[getFontSize('companyName')]}`}>{data.companyName}</div> 
@@ -590,7 +590,7 @@
                 }
               </div>
               <div className="w-full flex items-center border-b-[3px] border-gray-800 pb-1 relative group">
-                {!isExporting && <div className="absolute -top-6 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('period')} onChange={(v) => onFontSizeChange('period', v)} /></div>}
+                {!isExporting && <div className="absolute -top-6 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('period')} onChange={(v) => onFontSizeChange('period', v)} /></div>}
                 <span className="font-bold text-gray-900 mr-2 whitespace-nowrap">実習日:</span>
                 {isExporting ? 
                   <div className={`w-full font-bold text-gray-900 ${FONT_SIZES[getFontSize('period')]}`}>{formatPeriodDisplay(data.startDate, data.endDate, data.daysCount, data.period)}</div> 
@@ -606,7 +606,7 @@
             
             <div className="relative pt-4 w-full mt-4 sm:mt-6 group">
               {!isExporting && (
-                <div className="absolute -top-1 right-2 z-20 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
+                <div className="absolute -top-1 right-2 z-20 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity">
                   <FontSizeToggle value={getFontSize('goal')} onChange={(v) => onFontSizeChange('goal', v)} />
                 </div>
               )}
@@ -936,7 +936,7 @@
                 ) : (
                   <>
                     <div onClick={() => openTextInput('名前', profile.name, v => handleProfileChange('name', v))} className={`cursor-pointer hover:bg-white/50 w-full text-center text-gray-900 min-h-[3rem] font-black flex items-center justify-center ${getProfileFontSize('2xl', profileNameFontSize)}`}>{profile.name || <span className="text-gray-500 font-normal text-base">名前を入力</span>}</div>
-                    <div className="absolute -top-3 right-0 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity z-20">
+                    <div className="absolute -top-3 right-0 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity z-20">
                       <FontSizeToggle value={profileNameFontSize} onChange={(v) => onFontSizeChange('profileName', v)} />
                     </div>
                   </>
@@ -958,11 +958,11 @@
               </div>
             </div>
           </div>
-          <div className="flex bg-white border-2 border-gray-200 rounded-md w-full relative overflow-hidden mt-4 min-h-[3.5rem] group"><div className={`bg-gray-100 text-gray-800 font-bold px-4 border-r-2 border-gray-200 flex items-center justify-center ${isExporting ? 'pb-3' : ''} ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>学級目標</div><div className="flex-grow flex items-center px-4 bg-white relative">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-3 ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal}</div> : <><div onClick={() => openTextInput('学級目標', profile.classGoal, v => handleProfileChange('classGoal', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2.5rem] flex items-center ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal || <span className="text-gray-400 font-normal">学級目標を入力</span>}</div><div className="absolute right-2 top-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={getFontSize('classGoal')} onChange={(v) => onFontSizeChange('classGoal', v)} /></div></>}</div></div>
+          <div className="flex bg-white border-2 border-gray-200 rounded-md w-full relative overflow-hidden mt-4 min-h-[3.5rem] group"><div className={`bg-gray-100 text-gray-800 font-bold px-4 border-r-2 border-gray-200 flex items-center justify-center ${isExporting ? 'pb-3' : ''} ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>学級目標</div><div className="flex-grow flex items-center px-4 bg-white relative">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-3 ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal}</div> : <><div onClick={() => openTextInput('学級目標', profile.classGoal, v => handleProfileChange('classGoal', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2.5rem] flex items-center ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal || <span className="text-gray-400 font-normal">学級目標を入力</span>}</div><div className="absolute right-2 top-2 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={getFontSize('classGoal')} onChange={(v) => onFontSizeChange('classGoal', v)} /></div></>}</div></div>
           <hr className="border-gray-300 my-4" />
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[340px] flex flex-col md:border-r-2 border-gray-300 pr-0 md:pr-4 py-1 shrink-0 relative group">
-              {!isExporting && <div className="absolute -top-3 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('stats')} onChange={(v) => onFontSizeChange('stats', v)} /></div>}
+              {!isExporting && <div className="absolute -top-3 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('stats')} onChange={(v) => onFontSizeChange('stats', v)} /></div>}
               <div className="flex flex-col justify-between flex-grow gap-4">
                 {basicStats.slice(0, 3).map((stat, statIndex) => {
                   const iconMatch = stat.name.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)\s*/u);
@@ -1000,7 +1000,7 @@
               </div>
             </div>
             <div className="flex-grow flex flex-col gap-5 relative group">
-              {!isExporting && <div className="absolute -top-3 right-0 opacity-0 group-hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('abilities')} onChange={(v) => onFontSizeChange('abilities', v)} /></div>}
+              {!isExporting && <div className="absolute -top-3 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('abilities')} onChange={(v) => onFontSizeChange('abilities', v)} /></div>}
               
               {!isExporting && showCopyButton && (
                 <div className="flex justify-end mb-[-10px] z-10 relative">
@@ -1410,7 +1410,10 @@
 
       useEffect(() => {
         const handleClickOutside = (event) => {
-          if (tabMenuRef.current && !tabMenuRef.current.contains(event.target)) setIsTabMenuOpen(false);
+          if (tabMenuRef.current && !tabMenuRef.current.contains(event.target)) {
+            setIsTabMenuOpen(false);
+            setOpenMenuGroups({ profile: false, target: false, training: false, docs: false });
+          }
           if (colorMenuRef.current && !colorMenuRef.current.contains(event.target)) setIsColorPaletteOpen(false);
           if (addSheetMenuRef.current && !addSheetMenuRef.current.contains(event.target)) setIsAddSheetMenuOpen(false);
           if (restoreMenuRef.current && !restoreMenuRef.current.contains(event.target)) setIsRestoreMenuOpen(false);
@@ -1823,7 +1826,7 @@ ${statsText || '特になし'}
         const file = event.target.files[0];
         if (file) {
           const reader = new FileReader();
-          reader.onloadend = () => { const img = new Image(); img.onload = () => { const dataUrl = compressImageTo35KB(img); updateCurrentData({ avatarUrl: dataUrl }); }; img.src = reader.result; };
+          reader.onloadend = () => { const img = new Image(); img.onload = () => { const dataUrl = compressImageTo100KB(img); updateCurrentData({ avatarUrl: dataUrl }); }; img.src = reader.result; };
           reader.readAsDataURL(file);
         }
         if (fileInputRef.current) fileInputRef.current.value = '';
@@ -1833,7 +1836,7 @@ ${statsText || '特になし'}
         const file = event.target.files[0];
         if (file) {
           const reader = new FileReader();
-          reader.onloadend = () => { const img = new Image(); img.onload = () => { const dataUrl = compressImageTo35KB(img); updateCurrentData({ coverImageUrl: dataUrl }); }; img.src = reader.result; };
+          reader.onloadend = () => { const img = new Image(); img.onload = () => { const dataUrl = compressImageTo100KB(img); updateCurrentData({ coverImageUrl: dataUrl }); }; img.src = reader.result; };
           reader.readAsDataURL(file);
         }
       };
@@ -2117,10 +2120,8 @@ ${statsText || '特になし'}
 
       const toggleGroup = (group) => {
         setOpenMenuGroups(prev => ({
-          profile: group === 'profile' ? !prev.profile : false,
-          target: group === 'target' ? !prev.target : false,
-          training: group === 'training' ? !prev.training : false,
-          docs: group === 'docs' ? !prev.docs : false
+          ...prev,
+          [group]: !prev[group]
         }));
       };
 
@@ -2298,13 +2299,13 @@ ${statsText || '特になし'}
                                 const hasAddBtn = group.id !== 'profile';
                                 return (
                                   <div key={group.id} className="border-b border-gray-200 last:border-b-0">
-                                    <div onClick={() => toggleGroup(group.id)} className={`px-4 py-3 font-bold text-sm flex justify-between items-center cursor-pointer transition-colors ${openMenuGroups[group.id] ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                                    <div onClick={() => toggleGroup(group.id)} className={`px-4 py-3 font-bold text-sm flex justify-between items-center cursor-pointer transition-colors ${openMenuGroups[group.id] ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
                                       <span>{group.title}</span>
                                       <div className="flex items-center gap-3">
                                         {hasAddBtn && (
                                           <button onClick={(e) => { e.stopPropagation(); openNewTabModal(group.id); }} className="text-blue-600 bg-blue-50 border border-blue-200 px-3 py-1 rounded text-xs hover:bg-blue-100 font-black shadow-sm active:scale-95 transition-transform">＋追加</button>
                                         )}
-                                        <span className={`${openMenuGroups[group.id] ? 'text-green-600' : 'text-gray-400'} text-xs`}>{openMenuGroups[group.id] ? '▼' : '▶'}</span>
+                                        <span className={`${openMenuGroups[group.id] ? 'text-gray-600' : 'text-gray-400'} text-xs`}>{openMenuGroups[group.id] ? '▼' : '▶'}</span>
                                       </div>
                                     </div>
                                     {openMenuGroups[group.id] && (
@@ -2319,7 +2320,11 @@ ${statsText || '特になし'}
                                               onDragOver={(e) => handleMenuDragOver(e, tab.id)}
                                               onDrop={(e) => handleMenuDrop(e, group.id, tab.id)}
                                               onDragEnd={handleMenuDragEnd}
-                                              onClick={() => { setActiveTab(tab.id); setIsTabMenuOpen(false); }} 
+                                              onClick={() => { 
+                                                setActiveTab(tab.id); 
+                                                setIsTabMenuOpen(false); 
+                                                setOpenMenuGroups({ profile: false, target: false, training: false, docs: false });
+                                              }} 
                                               className={`w-full text-left px-3 py-3 rounded-lg border-2 transition-all flex items-center justify-between text-sm ${menuDraggedItem?.id === tab.id ? 'opacity-50 border-dashed bg-white' : menuDragOverItem === tab.id ? 'border-blue-500 bg-blue-100 scale-[1.02] shadow-md z-10' : isActive ? 'bg-blue-50 border-blue-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50 shadow-sm'}`}
                                             >
                                               <span className={`font-bold truncate ${isActive ? 'text-blue-800' : 'text-gray-700'}`}>{tab.label}</span>
@@ -2346,7 +2351,11 @@ ${statsText || '特になし'}
                                 return (
                                   <button 
                                     key={tab.id} 
-                                    onClick={() => { setActiveTab(tab.id); setIsTabMenuOpen(false); }} 
+                                    onClick={() => { 
+                                      setActiveTab(tab.id); 
+                                      setIsTabMenuOpen(false); 
+                                      setOpenMenuGroups({ profile: false, target: false, training: false, docs: false });
+                                    }} 
                                     className={`w-full text-left px-3 py-3 rounded-lg border-2 transition-all flex items-center justify-between text-sm ${isActive ? 'bg-blue-50 border-blue-400 shadow-sm' : 'bg-white border-gray-200 hover:bg-gray-50 shadow-sm'}`}
                                   >
                                     <span className={`font-bold truncate ${isActive ? 'text-blue-800' : 'text-gray-700'}`}>{tab.label}</span>
@@ -3071,7 +3080,7 @@ ${statsText || '特になし'}
                   <div className="relative bg-white rounded-2xl shadow-2xl p-6 w-full max-w-lg flex flex-col border-[4px] border-indigo-400">
                     <h2 className="text-xl font-bold mb-4 text-indigo-800">文字コードで保存（バックアップ）</h2>
                     <p className="text-sm text-gray-600 mb-4">下の文字コードをコピーして、メモ帳などに貼り付けて保存してください。</p>
-                    <textarea readOnly value={importText} className="w-full h-48 p-3 border-2 border-gray-200 rounded-xl font-mono text-xs text-gray-600 outline-none bg-gray-50 mb-4 resize-none" onClick={e => e.target.select()} />
+                    <textarea readOnly value={importText} className="w-full h-48 p-3 border-2 border-gray-300 rounded-xl font-mono text-xs text-gray-600 outline-none bg-gray-50 mb-4 resize-none" onClick={e => e.target.select()} />
                     <div className="flex gap-3 justify-end">
                       <button type="button" onClick={() => setIsTextBackupModalOpen(false)} className="px-5 py-2.5 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-full font-bold">閉じる</button>
                       <button type="button" onClick={() => { copyToClipboard(importText); setSyncStatus('✅ コピー完了'); setTimeout(() => setSyncStatus('☁️ 最新'), 3000); setIsTextBackupModalOpen(false); }} className="px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full font-bold">コードをコピー</button>
