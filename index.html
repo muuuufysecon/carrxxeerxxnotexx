@@ -337,15 +337,14 @@
       </svg>
     );
 
-    const FontSizeToggle = ({ value, onChange }) => {
-      const sizes = ['medium', 'large', 'xlarge'];
+    const FontSizeToggle = ({ value, onChange, availableSizes = ['medium', 'large', 'xlarge'] }) => {
       const labels = { medium: '中', large: '大', xlarge: '特大' };
       const nextSize = () => { 
-        const currentIdx = sizes.indexOf(value);
+        const currentIdx = availableSizes.indexOf(value);
         if (currentIdx === -1) {
-          onChange(sizes[0]);
+          onChange(availableSizes[0]);
         } else {
-          onChange(sizes[(currentIdx + 1) % sizes.length]); 
+          onChange(availableSizes[(currentIdx + 1) % availableSizes.length]); 
         }
       };
       const displayLabel = labels[value] || labels['medium'];
@@ -688,23 +687,21 @@
           <div className="flex flex-col gap-4 mt-2 pb-8">
             <div className="flex flex-col gap-4 mb-2">
               <div className="w-full flex items-center border-b-[3px] border-gray-800 pb-1 relative group">
-                {!isExporting && <div className="absolute -top-6 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('companyName')} onChange={(v) => onFontSizeChange('companyName', v)} /></div>}
                 <span className="font-bold text-gray-900 mr-2 whitespace-nowrap">実習先:</span>
                 {isExporting ? 
-                  <div className={`w-full font-bold text-gray-900 ${FONT_SIZES[getFontSize('companyName')]}`}>{data.companyName}</div> 
+                  <div className={`w-full font-bold text-gray-900 ${FONT_SIZES['xlarge']}`}>{data.companyName}</div> 
                 : 
-                  <div onClick={() => openTextInput('実習先', data.companyName, v => onUpdate('companyName', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50/50 min-h-[1.5rem] ${FONT_SIZES[getFontSize('companyName')]}`}>
+                  <div onClick={() => openTextInput('実習先', data.companyName, v => onUpdate('companyName', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50/50 min-h-[1.5rem] ${FONT_SIZES['xlarge']}`}>
                     {data.companyName || <span className="text-gray-400 font-normal">クリックして入力</span>}
                   </div>
                 }
               </div>
               <div className="w-full flex items-center border-b-[3px] border-gray-800 pb-1 relative group">
-                {!isExporting && <div className="absolute -top-6 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('period')} onChange={(v) => onFontSizeChange('period', v)} /></div>}
                 <span className="font-bold text-gray-900 mr-2 whitespace-nowrap">実習日:</span>
                 {isExporting ? 
-                  <div className={`w-full font-bold text-gray-900 ${FONT_SIZES[getFontSize('period')]}`}>{formatPeriodDisplay(data.startDate, data.endDate, data.daysCount, data.period)}</div> 
+                  <div className={`w-full font-bold text-gray-900 ${FONT_SIZES['xlarge']}`}>{formatPeriodDisplay(data.startDate, data.endDate, data.daysCount, data.period)}</div> 
                 : 
-                  <div onClick={openPeriodModal} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50/50 min-h-[1.5rem] ${FONT_SIZES[getFontSize('period')]}`}>
+                  <div onClick={openPeriodModal} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50/50 min-h-[1.5rem] ${FONT_SIZES['xlarge']}`}>
                     {formatPeriodDisplay(data.startDate, data.endDate, data.daysCount, data.period) || <span className="text-gray-400 font-normal">クリックして日付と日数を入力</span>}
                   </div>
                 }
@@ -745,7 +742,7 @@
                       )}
                     </div>
                     <div className="w-full sm:w-1/3 pl-0 sm:pl-4 flex flex-col justify-center items-center">
-                       <div className={`text-6xl font-black ${evalColor.text} mb-2 h-14 flex items-center justify-center relative -left-6`}>
+                       <div className={`text-6xl font-black ${evalColor.text} mb-2 h-14 flex items-center justify-center relative -left-6 ${isExporting ? '-translate-y-4' : ''}`}>
                          {getGoalEvaluationMark(goal.evaluation || 0)}
                        </div>
                        <div className="flex items-center w-full gap-2">
@@ -1029,6 +1026,9 @@
 
     const ProfileView = ({ data, isExporting, profile, avatarUrl, basicStats, abilitiesGrid, handleProfileChange, openTextInput, getFontSize, onFontSizeChange, formatDate, fileInputRef, handleAvatarClick, handleFileChange, setIsCountryModalOpen, FLAGS, getProfileFontSize, getMuscleRank, openBasicStatModal, openSliderModal, getExportAbilityStyle, getAbilityStyle, handleCellClick, draggedIndex, handleDragStart, handleDragOver, handleDrop, handleDragEnd, showCopyButton, prevGradeName, onCopyPreviousAbilities }) => {
       const profileNameFontSize = data.fontSizes?.profileName || 'medium';
+      const exportSize = isExporting ? 'xlarge' : profileNameFontSize;
+      const exportBaseSize = isExporting ? 'xlarge' : 'large';
+      const exportMediumSize = isExporting ? 'xlarge' : 'medium';
       return (
         <div className="flex flex-col bg-white rounded-xl shadow-inner p-4 sm:p-6 w-full font-pop">
           <div className="w-full mb-6 px-1 flex flex-col sm:flex-row justify-between items-start sm:items-end border-b-[3px] border-gray-800 pb-3 gap-2 mt-4">
@@ -1041,12 +1041,12 @@
           </div>
           <div className="flex flex-wrap lg:flex-nowrap items-end gap-4 w-full">
             <div className="flex flex-col justify-end flex-grow lg:max-w-[320px] self-stretch">
-              <div className="bg-cyan-300 border-2 border-cyan-500 px-5 py-2 rounded-md shadow-inner w-full relative z-10 flex items-center min-h-[3.5rem] group">
+              <div className="bg-cyan-300 border-[3px] border-gray-500 px-5 py-2 rounded-md shadow-inner w-full relative z-10 flex items-center min-h-[3.5rem] group">
                 {isExporting ? (
-                  <div className={`w-full font-black text-center whitespace-nowrap overflow-hidden text-gray-900 pb-3 ${getProfileFontSize('2xl', profileNameFontSize)}`}>{profile.name}</div>
+                  <div className={`w-full font-black text-center whitespace-nowrap overflow-hidden text-gray-900 pb-3 ${getProfileFontSize('2xl', exportSize)}`}>{profile.name}</div>
                 ) : (
                   <>
-                    <div onClick={() => openTextInput('名前', profile.name, v => handleProfileChange('name', v))} className={`cursor-pointer hover:bg-white/50 w-full text-center text-gray-900 min-h-[3rem] font-black flex items-center justify-center ${getProfileFontSize('2xl', profileNameFontSize)}`}>{profile.name || <span className="text-gray-500 font-normal text-base">名前を入力</span>}</div>
+                    <div onClick={() => openTextInput('名前', profile.name, v => handleProfileChange('name', v))} className={`cursor-pointer hover:bg-white/50 w-full text-center text-gray-900 min-h-[3rem] font-black flex items-center justify-center ${getProfileFontSize('2xl', exportSize)}`}>{profile.name || <span className="text-gray-500 font-normal text-base">名前を入力</span>}</div>
                     <div className="absolute -top-3 right-0 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity z-20">
                       <FontSizeToggle value={profileNameFontSize} onChange={(v) => onFontSizeChange('profileName', v)} />
                     </div>
@@ -1054,40 +1054,39 @@
                 )}
               </div>
             </div>
-            <div className="flex border-2 border-gray-300 bg-white rounded-md overflow-hidden min-h-[3.5rem] mb-0 relative group">
-              <div className="w-32 border-r-2 border-gray-300 flex items-center justify-center relative">
-                {isExporting ? <div className={`text-center font-bold whitespace-nowrap overflow-hidden text-gray-900 px-2 pb-2 ${getProfileFontSize('base', 'large')}`}>{profile.team}</div> : <div onClick={() => openTextInput('出身地', profile.team, v => handleProfileChange('team', v))} className={`w-full text-center font-bold text-gray-900 cursor-pointer hover:bg-gray-100 min-h-[2rem] flex items-center justify-center ${getProfileFontSize('base', 'large')}`}>{profile.team || <span className="text-gray-400 font-normal">出身地</span>}</div>}
+            <div className="flex border-[3px] border-gray-500 bg-white rounded-md overflow-hidden min-h-[3.5rem] mb-0 relative group">
+              <div className="w-32 border-r-[3px] border-gray-500 flex items-center justify-center relative">
+                {isExporting ? <div className={`text-center font-bold whitespace-nowrap overflow-hidden text-gray-900 px-2 pb-2 ${getProfileFontSize('base', exportBaseSize)}`}>{profile.team}</div> : <div onClick={() => openTextInput('出身地', profile.team, v => handleProfileChange('team', v))} className={`w-full text-center font-bold text-gray-900 cursor-pointer hover:bg-gray-100 min-h-[2rem] flex items-center justify-center ${getProfileFontSize('base', exportBaseSize)}`}>{profile.team || <span className="text-gray-400 font-normal">出身地</span>}</div>}
               </div>
               <div className={`relative w-24 flex items-center justify-center bg-white p-1 transition-colors ${!isExporting && 'cursor-pointer hover:bg-gray-100'}`} onClick={() => !isExporting && setIsCountryModalOpen(true)}><svg viewBox="0 0 900 600" className="w-full h-full border border-gray-300 rounded-sm pointer-events-none">{FLAGS[profile.country]?.svg || FLAGS['Japan'].svg}</svg></div>
             </div>
-            <div className="w-28 h-28 bg-white border-2 border-gray-300 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center relative cursor-pointer hover:opacity-80 group" onClick={handleAvatarClick}><input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />{avatarUrl ? <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" /> : <div className="flex flex-col items-center justify-center text-blue-400 bg-blue-50/50 w-full h-full text-xs font-black">画像を選択</div>}</div>
+            <div className="w-28 h-28 bg-white border-[3px] border-gray-500 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center relative cursor-pointer hover:opacity-80 group" onClick={handleAvatarClick}><input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />{avatarUrl ? <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" /> : <div className="flex flex-col items-center justify-center text-blue-400 bg-blue-50/50 w-full h-full text-xs font-black">画像を選択</div>}</div>
             <div className="flex flex-col gap-3 flex-grow">
-              <div className="flex bg-white border-2 border-gray-200 rounded-md flex-grow min-h-[2.5rem] overflow-hidden relative group"><div className={`bg-gray-100 text-gray-800 font-bold px-4 border-r-2 border-gray-200 flex items-center justify-center ${getProfileFontSize('base', 'large')}`}>学校</div><div className="flex-grow flex items-center px-3 bg-white">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-2 ${getProfileFontSize('base', 'large')}`}>{profile.company}</div> : <div onClick={() => openTextInput('学校', profile.company, v => handleProfileChange('company', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2rem] flex items-center ${getProfileFontSize('base', 'large')}`}>{profile.company || <span className="text-gray-400 font-normal">学校名を入力</span>}</div>}</div></div>
+              <div className="flex bg-white border-[3px] border-gray-500 rounded-md flex-grow min-h-[2.5rem] overflow-hidden relative group"><div className={`bg-gray-100 text-gray-800 font-bold px-4 border-r-[3px] border-gray-500 flex items-center justify-center ${getProfileFontSize('base', exportBaseSize)}`}>学校</div><div className="flex-grow flex items-center px-3 bg-white">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-2 ${getProfileFontSize('base', exportBaseSize)}`}>{profile.company}</div> : <div onClick={() => openTextInput('学校', profile.company, v => handleProfileChange('company', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2rem] flex items-center ${getProfileFontSize('base', exportBaseSize)}`}>{profile.company || <span className="text-gray-400 font-normal">学校名を入力</span>}</div>}</div></div>
               <div className="flex gap-3">
-                <div className="flex bg-white border-2 border-gray-200 rounded-md flex-grow min-h-[2.5rem] overflow-hidden relative group"><div className={`bg-gray-100 text-gray-800 font-bold px-3 border-r-2 border-gray-200 flex items-center justify-center ${getProfileFontSize('base', 'large')}`}>役職</div><div className="flex-grow flex items-center px-3 bg-white">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-2 ${getProfileFontSize('base', 'large')}`}>{profile.role}</div> : <div onClick={() => openTextInput('役職', profile.role, v => handleProfileChange('role', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2rem] flex items-center ${getProfileFontSize('base', 'large')}`}>{profile.role || <span className="text-gray-400 font-normal">役職</span>}</div>}</div></div>
-                <div className="flex bg-white border-2 border-gray-200 rounded-md w-32 min-h-[2.5rem] overflow-hidden relative group"><div className={`bg-gray-100 text-gray-800 font-bold px-2 border-r-2 border-gray-200 flex items-center justify-center ${getProfileFontSize('base', 'medium')}`}>学年</div><div className="flex-grow flex items-center px-2 bg-white">{isExporting ? <div className={`w-full font-bold text-gray-900 text-center whitespace-nowrap overflow-hidden pb-2 ${getProfileFontSize('base', 'medium')}`}>{profile.years}</div> : <div onClick={() => openTextInput('学年', profile.years, v => handleProfileChange('years', v))} className={`w-full font-bold text-gray-900 text-center cursor-pointer hover:bg-gray-50 min-h-[2rem] flex items-center justify-center ${getProfileFontSize('base', 'medium')}`}>{profile.years || <span className="text-gray-400 font-normal">例: 高1</span>}</div>}</div></div>
+                <div className="flex bg-white border-[3px] border-gray-500 rounded-md flex-grow min-h-[2.5rem] overflow-hidden relative group"><div className={`bg-gray-100 text-gray-800 font-bold px-3 border-r-[3px] border-gray-500 flex items-center justify-center ${getProfileFontSize('base', exportBaseSize)}`}>役職</div><div className="flex-grow flex items-center px-3 bg-white">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-2 ${getProfileFontSize('base', exportBaseSize)}`}>{profile.role}</div> : <div onClick={() => openTextInput('役職', profile.role, v => handleProfileChange('role', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2rem] flex items-center ${getProfileFontSize('base', exportBaseSize)}`}>{profile.role || <span className="text-gray-400 font-normal">役職</span>}</div>}</div></div>
+                <div className="flex bg-white border-[3px] border-gray-500 rounded-md w-32 min-h-[2.5rem] overflow-hidden relative group"><div className={`bg-gray-100 text-gray-800 font-bold px-2 border-r-[3px] border-gray-500 flex items-center justify-center ${getProfileFontSize('base', exportMediumSize)}`}>学年</div><div className="flex-grow flex items-center px-2 bg-white">{isExporting ? <div className={`w-full font-bold text-gray-900 text-center whitespace-nowrap overflow-hidden pb-2 ${getProfileFontSize('base', exportMediumSize)}`}>{profile.years}</div> : <div onClick={() => openTextInput('学年', profile.years, v => handleProfileChange('years', v))} className={`w-full font-bold text-gray-900 text-center cursor-pointer hover:bg-gray-50 min-h-[2rem] flex items-center justify-center ${getProfileFontSize('base', exportMediumSize)}`}>{profile.years || <span className="text-gray-400 font-normal">例: 高1</span>}</div>}</div></div>
               </div>
             </div>
           </div>
-          <div className="flex bg-white border-2 border-gray-200 rounded-md w-full relative overflow-hidden mt-4 min-h-[3.5rem] group"><div className={`bg-gray-100 text-gray-800 font-bold px-4 border-r-2 border-gray-200 flex items-center justify-center ${isExporting ? 'pb-3' : ''} ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>学級目標</div><div className="flex-grow flex items-center px-4 bg-white relative">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-3 ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal}</div> : <><div onClick={() => openTextInput('学級目標', profile.classGoal, v => handleProfileChange('classGoal', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2.5rem] flex items-center ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal || <span className="text-gray-400 font-normal">学級目標を入力</span>}</div><div className="absolute right-2 top-2 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={getFontSize('classGoal')} onChange={(v) => onFontSizeChange('classGoal', v)} /></div></>}</div></div>
-          <hr className="border-gray-300 my-4" />
+          <div className="flex bg-white border-[3px] border-gray-500 rounded-md w-full relative overflow-hidden mt-4 min-h-[3.5rem] group"><div className={`bg-gray-100 text-gray-800 font-bold px-4 border-r-[3px] border-gray-500 flex items-center justify-center ${isExporting ? 'pb-3' : ''} ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>学級目標</div><div className="flex-grow flex items-center px-4 bg-white relative">{isExporting ? <div className={`w-full font-bold text-gray-900 whitespace-nowrap overflow-hidden pb-3 ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal}</div> : <><div onClick={() => openTextInput('学級目標', profile.classGoal, v => handleProfileChange('classGoal', v))} className={`w-full font-bold text-gray-900 cursor-pointer hover:bg-gray-50 min-h-[2.5rem] flex items-center ${getProfileFontSize('2xl', getFontSize('classGoal'))}`}>{profile.classGoal || <span className="text-gray-400 font-normal">学級目標を入力</span>}</div><div className="absolute right-2 top-2 opacity-40 hover:opacity-100 focus-within:opacity-100 transition-opacity"><FontSizeToggle value={getFontSize('classGoal')} onChange={(v) => onFontSizeChange('classGoal', v)} /></div></>}</div></div>
+          <hr className="border-gray-500 my-4" />
           <div className="flex flex-col md:flex-row gap-6">
             <div className="w-full md:w-[340px] flex flex-col md:border-r-2 border-gray-300 pr-0 md:pr-4 py-1 shrink-0 relative group">
-              {!isExporting && <div className="absolute -top-3 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('stats')} onChange={(v) => onFontSizeChange('stats', v)} /></div>}
               <div className="flex flex-col justify-between flex-grow gap-4">
                 {basicStats.slice(0, 3).map((stat, statIndex) => {
                   const iconMatch = stat.name.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)\s*/u);
                   const icon = iconMatch ? iconMatch[0] : '';
                   const text = stat.name.replace(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)\s*/u, '');
                   return (
-                    <div key={stat.id} className="flex flex-col gap-3 bg-white border-[3px] border-gray-200 rounded-xl p-3 shadow-sm">
-                      {isExporting ? <div className="bg-yellow-50 border-2 border-yellow-400 rounded-full w-full py-1.5 flex items-center justify-center shadow-sm"><span className={`${getProfileFontSize('statTitle', getFontSize('stats'))} font-extrabold text-gray-900 tracking-widest pb-2`}>{icon} {text}</span></div> : <button type="button" onClick={() => openBasicStatModal(statIndex)} className="bg-yellow-50 border-2 border-yellow-400 rounded-full w-full py-1.5 flex items-center justify-center shadow-sm hover:bg-yellow-100"><span className={`${getProfileFontSize('statTitle', getFontSize('stats'))} font-extrabold text-gray-900 tracking-widest pb-2`}>{icon} {text}</span></button>}
+                    <div key={stat.id} className="flex flex-col gap-3 bg-white border-[3px] border-gray-500 rounded-xl p-3 shadow-sm">
+                      {isExporting ? <div className="bg-yellow-50 border-2 border-gray-500 rounded-full w-full py-1.5 flex items-center justify-center shadow-sm"><span className={`${getProfileFontSize('statTitle', 'xlarge')} font-extrabold text-gray-900 tracking-widest pb-2`}>{icon} {text}</span></div> : <button type="button" onClick={() => openBasicStatModal(statIndex)} className="bg-yellow-50 border-2 border-gray-500 rounded-full w-full py-1.5 flex items-center justify-center shadow-sm hover:bg-yellow-100"><span className={`${getProfileFontSize('statTitle', 'xlarge')} font-extrabold text-gray-900 tracking-widest pb-2`}>{icon} {text}</span></button>}
                       <div className="flex flex-col gap-2">
                         {stat.records.map((record, recordIndex) => {
                           const muscle = getMuscleRank(record.value);
                           return (
                             <div key={recordIndex} className="flex items-center gap-2 h-8 px-1">
-                              <span className={`font-bold text-gray-700 w-8 text-center shrink-0 ${getProfileFontSize('statMonth', getFontSize('stats'))}`}>{record.month}</span>
+                              <span className={`font-bold text-gray-700 w-8 text-center shrink-0 ${getProfileFontSize('statMonth', 'xlarge')}`}>{record.month}</span>
                               <div className={`flex items-center justify-center flex-shrink-0 transition-all ${muscle.boxClass} ${isExporting && record.value > 0 ? '-translate-y-2' : ''}`}>
                                 {muscle.icon}
                               </div>
@@ -1100,7 +1099,7 @@
                                   <div className={`absolute top-1/2 -mt-2.5 w-5 h-5 rounded-full bg-blue-500 shadow-md ${!isExporting && 'pointer-events-none'}`} style={{ left: `calc(${record.value}% - 10px)` }}></div>
                                 </div>
                               </div>
-                              <div className="w-8 text-right shrink-0"><span className={`font-black ${getProfileFontSize('statValue', getFontSize('stats'))} ${muscle.textClass}`}>{record.value}</span></div>
+                              <div className="w-8 text-right shrink-0"><span className={`font-black ${getProfileFontSize('statValue', 'xlarge')} ${muscle.textClass}`}>{record.value}</span></div>
                             </div>
                           );
                         })}
@@ -1111,7 +1110,7 @@
               </div>
             </div>
             <div className="flex-grow flex flex-col gap-5 relative group">
-              {!isExporting && <div className="absolute -top-3 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('abilities')} onChange={(v) => onFontSizeChange('abilities', v)} /></div>}
+              {!isExporting && <div className="absolute -top-3 right-0 opacity-40 hover:opacity-100 transition-opacity z-20"><FontSizeToggle value={getFontSize('abilities')} onChange={(v) => onFontSizeChange('abilities', v)} availableSizes={['large', 'xlarge']} /></div>}
               
               {!isExporting && showCopyButton && (
                 <div className="flex justify-end mb-[-10px] z-10 relative">
@@ -1126,24 +1125,24 @@
                 </div>
               )}
 
-              <div className="bg-cyan-50/60 rounded-xl p-4 border-[3px] border-cyan-200 shadow-sm flex flex-col">
+              <div className="bg-cyan-50/60 rounded-xl p-4 border-[3px] border-gray-500 shadow-sm flex flex-col">
                 <div className="flex items-center mb-4">{isExporting ? <div className="bg-cyan-400 text-white font-black px-6 pt-1 pb-3 text-lg md:text-xl rounded-full shadow-sm flex items-center">好きなこと・得意なこと・自慢したいこと</div> : <span className="bg-cyan-400 text-white font-black px-6 pt-1 pb-3 text-lg md:text-xl rounded-full shadow-sm">好きなこと・得意なこと・自慢したいこと</span>}</div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {abilitiesGrid.slice(0, 16).map((ability, index) => (
                     <div key={index} className={`h-12 relative ${draggedIndex === index ? 'opacity-40' : ''}`} draggable={!isExporting && ability !== null} onDragStart={(e) => handleDragStart(e, index)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, index)} onDragEnd={handleDragEnd}>
-                      {ability ? (isExporting ? <div className={`${getExportAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</div> : <button type="button" onClick={() => handleCellClick(index)} className={`${getAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</button>) : (isExporting ? <div className="w-full h-full border-2 border-dashed border-cyan-300 rounded-lg bg-white/60 flex items-center justify-center text-cyan-300 text-3xl font-light shadow-sm">＋</div> : <button type="button" onClick={() => handleCellClick(index)} className="w-full h-full border-2 border-dashed border-cyan-300 rounded-lg bg-white hover:bg-cyan-50 flex items-center justify-center text-cyan-300 text-3xl font-light shadow-sm">＋</button>)}
+                      {ability ? (isExporting ? <div className={`${getExportAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</div> : <button type="button" onClick={() => handleCellClick(index)} className={`${getAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</button>) : (isExporting ? <div className="w-full h-full border-2 border-dashed border-gray-400 rounded-lg bg-white/60 flex items-center justify-center text-gray-400 text-3xl font-light shadow-sm">＋</div> : <button type="button" onClick={() => handleCellClick(index)} className="w-full h-full border-2 border-dashed border-gray-400 rounded-lg bg-white hover:bg-gray-100 flex items-center justify-center text-gray-400 text-3xl font-light shadow-sm">＋</button>)}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="bg-pink-50/60 rounded-xl p-4 border-[3px] border-pink-200 shadow-sm flex flex-col">
+              <div className="bg-pink-50/60 rounded-xl p-4 border-[3px] border-gray-500 shadow-sm flex flex-col">
                 <div className="flex items-center mb-4">{isExporting ? <div className="bg-pink-400 text-white font-black px-6 pt-1 pb-3 text-lg md:text-xl rounded-full shadow-sm flex items-center">苦手なこと・手伝ってほしいこと</div> : <span className="bg-pink-400 text-white font-black px-6 pt-1 pb-3 text-lg md:text-xl rounded-full shadow-sm">苦手なこと・手伝ってほしいこと</span>}</div>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {abilitiesGrid.slice(16, 24).map((ability, i) => {
                     const index = i + 16;
                     return (
                       <div key={index} className={`h-12 relative ${draggedIndex === index ? 'opacity-40' : ''}`} draggable={!isExporting && ability !== null} onDragStart={(e) => handleDragStart(e, index)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, index)} onDragEnd={handleDragEnd}>
-                        {ability ? (isExporting ? <div className={`${getExportAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</div> : <button type="button" onClick={() => handleCellClick(index)} className={`${getAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</button>) : (isExporting ? <div className="w-full h-full border-2 border-dashed border-pink-300 rounded-lg bg-white/60 flex items-center justify-center text-pink-300 text-3xl font-light shadow-sm">＋</div> : <button type="button" onClick={() => handleCellClick(index)} className="w-full h-full border-2 border-dashed border-pink-300 rounded-lg bg-white hover:bg-pink-50 flex items-center justify-center text-pink-300 text-3xl font-light shadow-sm">＋</button>)}
+                        {ability ? (isExporting ? <div className={`${getExportAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</div> : <button type="button" onClick={() => handleCellClick(index)} className={`${getAbilityStyle(ability.type, getFontSize('abilities'))}`}>{ability.name}</button>) : (isExporting ? <div className="w-full h-full border-2 border-dashed border-gray-400 rounded-lg bg-white/60 flex items-center justify-center text-gray-400 text-3xl font-light shadow-sm">＋</div> : <button type="button" onClick={() => handleCellClick(index)} className="w-full h-full border-2 border-dashed border-gray-400 rounded-lg bg-white hover:bg-gray-100 flex items-center justify-center text-gray-400 text-3xl font-light shadow-sm">＋</button>)}
                       </div>
                     );
                   })}
@@ -1274,7 +1273,11 @@
       };
 
       const getFontSize = (field) => {
-        if (currentData.fontSizes?.[field]) return currentData.fontSizes[field];
+        if (currentData.fontSizes?.[field]) {
+          let size = currentData.fontSizes[field];
+          if (field === 'abilities' && (size === 'small' || size === 'medium')) size = 'large';
+          return size;
+        }
         if (field === 'stats') return 'xlarge';
         if (field === 'profileName') return 'medium';
         if (field === 'abilities') return 'large';
@@ -1767,7 +1770,7 @@
             }
           }
         });
-      
+        
         let abilitiesText = "";
         const seenAbilityNames = new Set();
         for (let grade = 1; grade <= maxInputGrade; grade++) {
@@ -1784,7 +1787,7 @@
           }
         }
         const totalAbilities = seenAbilityNames.size;
-      
+        
         let statsText = "";
         for (let grade = 1; grade <= maxInputGrade; grade++) {
           if (allData[`high${grade}`]?.basicStats) {
@@ -1805,7 +1808,7 @@
             }
           }
         }
-      
+        
         const prompt = `あなたは生徒の成長を見守ってきたAI先生です。現在、生徒は高校${maxInputGrade}年生（または修了）です。
 以下の生徒の高校${maxInputGrade}年生までの成長記録と将来の夢をふまえて、夢や願いの実現に向けたポジティブで具体的なアドバイスを150文字程度で生成してください。
 ※能力値が大きく伸びたことや、好きなこと・得意なこと・自慢したいことが増えた（または変化した）ことに触れて褒めつつ、これからの人生や次の目標に向けたエールを送ってください。
@@ -1988,14 +1991,14 @@ ${statsText || '特になし'}
 
       const getAbilityStyle = (type, fontSizeMode) => {
         const fontSizeClass = getProfileFontSize('ability', fontSizeMode);
-        const baseStyle = `flex items-center justify-start font-extrabold rounded-lg border-[3px] pt-0 pb-2 px-2.5 w-full h-full shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition-all leading-tight text-left tracking-wide break-words touch-manipulation select-none ${fontSizeClass}`;
+        const baseStyle = `flex items-center justify-start font-extrabold rounded-lg border-[3px] pt-0 pb-2 px-2.5 w-full h-full shadow-sm cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition-all leading-tight text-left tracking-wide break-words touch-manipulation select-none border-gray-500 ${fontSizeClass}`;
         switch (type) {
-          case 'rainbow': return `${baseStyle} bg-gradient-to-r from-pink-400 via-yellow-400 to-cyan-400 border-white text-gray-900`;
-          case 'gold': return `${baseStyle} bg-gradient-to-b from-yellow-200 to-yellow-400 border-yellow-500 text-gray-900`;
-          case 'red': case 'red_f': case 'red_d': return `${baseStyle} bg-pink-100 border-pink-400 text-gray-900`;
-          case 'green': case 'green_f': return `${baseStyle} bg-emerald-100 border-emerald-400 text-gray-900`;
-          case 'blue': case 'blue_b': case 'blue_d': return `${baseStyle} bg-cyan-100 border-cyan-400 text-gray-900`;
-          default: return `${baseStyle} bg-white border-gray-300 text-gray-900`;
+          case 'rainbow': return `${baseStyle} bg-gradient-to-r from-pink-400 via-yellow-400 to-cyan-400 text-gray-900`;
+          case 'gold': return `${baseStyle} bg-gradient-to-b from-yellow-200 to-yellow-400 text-gray-900`;
+          case 'red': case 'red_f': case 'red_d': return `${baseStyle} bg-pink-100 text-gray-900`;
+          case 'green': case 'green_f': return `${baseStyle} bg-emerald-100 text-gray-900`;
+          case 'blue': case 'blue_b': case 'blue_d': return `${baseStyle} bg-cyan-100 text-gray-900`;
+          default: return `${baseStyle} bg-white text-gray-900`;
         }
       };
       
