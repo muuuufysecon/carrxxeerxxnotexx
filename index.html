@@ -172,14 +172,14 @@
     const createInitialGrid = () => Array(24).fill(null);
 
     const createCoverData = () => ({ schoolName: '秋田県立秋田きらり支援学校　高等部', title: 'キャリアノート', subtitle: '', currentGrade: '', coverImageUrl: null, enterYear: '', enterMonth: '', graduateYear: '', graduateMonth: '', themeColor: DEFAULT_COLORS.cover, updatedAt: null });
-    const createTargetData = (label = '目標（高１・１学期）') => ({ tabLabel: label, title: '夢の実現に向けて～目標設定シート～', term: '一学期', name: '', q1: '', q2: '', q3: [{ id: generateId(), text: '' }], q4: '', q5: '', themeColor: DEFAULT_COLORS.target1, fontSizes: {}, updatedAt: null });
+    const createTargetData = (label = '目標（高１・前期）') => ({ tabLabel: label, title: '夢の実現に向けて～目標設定シート～', term: '前期', name: '', q1: '', q2: '', q3: [{ id: generateId(), text: '' }], q4: '', q5: '', themeColor: DEFAULT_COLORS.target1, fontSizeMode: 'large', fontSizes: {}, updatedAt: null });
     const createTrainingData = (label = '実習（高１・６月）') => ({ tabLabel: label, title: '実習記録', companyName: '', period: '', startDate: '', endDate: '', daysCount: '', activities: '', goals: [{ id: Date.now(), text: '', evaluation: 0 }], comment: '', reflection: '', themeColor: DEFAULT_COLORS.training1, fontSizeMode: 'medium', fontSizes: {}, updatedAt: null });
-    const createAwardsData = (label = '受賞歴①') => ({ tabLabel: label, records: [{ id: Date.now(), date: '', title: '', description: '' }], themeColor: DEFAULT_COLORS.docs1, updatedAt: null });
+    const createAwardsData = (label = '受賞歴①') => ({ tabLabel: label, records: [], themeColor: DEFAULT_COLORS.docs1, updatedAt: null });
     const createInitialData = (defaultColor) => ({ basicStats: JSON.parse(JSON.stringify(INITIAL_BASIC_STATS)), abilitiesGrid: createInitialGrid(), avatarUrl: null, themeColor: defaultColor, profile: { name: '', team: '', country: 'Japan', number: '', company: '', role: '', classGoal: '', years: '', stars: '' }, fontSizeMode: 'medium', fontSizes: { stats: 'xlarge', profileName: 'medium', abilities: 'large' }, updatedAt: null });
 
     const createBlankBasicStats = () => [{ id: 'stat1', name: '', records: [{ month: '4月', value: 0 }, { month: '9月', value: 0 }, { month: '3月', value: 0 }] }, { id: 'stat2', name: '', records: [{ month: '4月', value: 0 }, { month: '9月', value: 0 }, { month: '3月', value: 0 }] }, { id: 'stat3', name: '', records: [{ month: '4月', value: 0 }, { month: '9月', value: 0 }, { month: '3月', value: 0 }] }];
     const createBlankCoverData = (prev) => ({ schoolName: '秋田県立秋田きらり支援学校　高等部', title: '', subtitle: '', currentGrade: '', coverImageUrl: null, enterYear: '', enterMonth: '', graduateYear: '', graduateMonth: '', themeColor: prev.themeColor });
-    const createBlankTargetData = (prev) => ({ tabLabel: prev.tabLabel, title: '夢の実現に向けて～目標設定シート～', term: '一学期', name: '', q1: '', q2: '', q3: [{ id: generateId(), text: '' }], q4: '', q5: '', themeColor: prev.themeColor, fontSizeMode: prev.fontSizeMode, fontSizes: prev.fontSizes });
+    const createBlankTargetData = (prev) => ({ tabLabel: prev.tabLabel, title: '夢の実現に向けて～目標設定シート～', term: '前期', name: '', q1: '', q2: '', q3: [{ id: generateId(), text: '' }], q4: '', q5: '', themeColor: prev.themeColor, fontSizeMode: prev.fontSizeMode || 'large', fontSizes: prev.fontSizes });
     const createBlankTrainingData = (prev) => ({ tabLabel: prev.tabLabel, title: '実習記録', companyName: '', period: '', startDate: '', endDate: '', daysCount: '', activities: '', goals: [{ id: Date.now(), text: '', evaluation: 0 }], comment: '', reflection: '', themeColor: prev.themeColor, fontSizeMode: prev.fontSizeMode, fontSizes: prev.fontSizes });
     const createBlankAwardsData = (prev) => ({ tabLabel: prev.tabLabel, records: [], themeColor: prev.themeColor });
     const createBlankProfileData = (prev) => ({ basicStats: createBlankBasicStats(), abilitiesGrid: Array(24).fill(null), avatarUrl: null, themeColor: prev.themeColor, profile: { name: '', team: '', country: prev.profile?.country || 'Japan', number: '', company: '', role: '', classGoal: '', years: '', stars: '' }, fontSizeMode: prev.fontSizeMode, fontSizes: prev.fontSizes });
@@ -955,8 +955,8 @@
               {abilitySlots.map((a, i) => (
                 <div key={i} className={`relative flex items-center justify-center ${isExporting ? 'h-20' : 'h-20 sm:h-24'}`}>
                   {a ? (
-                    <div className={`w-full h-full relative p-1 pt-4 rounded-lg border-2 flex flex-col items-center justify-center shadow-sm overflow-hidden ${getMiniAbilityStyle(a.type)}`}>
-                       {!a.isOverflow && <span className="absolute top-0 left-0 text-[10px] sm:text-xs font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-br-lg shadow-sm z-10 leading-none">高{a.grade}</span>}
+                    <div className={`w-full h-full relative p-1 pt-4 rounded-lg border-2 flex flex-col items-center justify-center shadow-sm ${isExporting ? '' : 'overflow-hidden'} ${getMiniAbilityStyle(a.type)}`}>
+                       {!a.isOverflow && <span className={`absolute top-0 left-0 text-[10px] sm:text-xs font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-br-lg shadow-sm z-10 leading-none ${isExporting ? '-translate-y-2' : ''}`}>高{a.grade}</span>}
                        <span className={`w-full text-center font-bold text-lg sm:text-xl leading-snug break-words px-1 pb-1 ${a.isOverflow ? '-mt-3 text-gray-600' : ''}`}>{a.name}</span>
                     </div>
                   ) : (
@@ -1162,7 +1162,7 @@
       const [appAuthPassword, setAppAuthPassword] = useState('');
       const [appAuthError, setAppAuthError] = useState('');
       const [allData, setAllData] = useState({
-        cover: createCoverData(), target1: createTargetData('目標（高１・１学期）'), training1: createTrainingData('実習（高１・６月）'), docs1: createAwardsData('受賞歴①'),
+        cover: createCoverData(), target1: createTargetData('目標（高１・前期）'), training1: createTrainingData('実習（高１・６月）'), docs1: createAwardsData('受賞歴①'),
         high1: createInitialData(DEFAULT_COLORS.high1), high2: createInitialData(DEFAULT_COLORS.high2), high3: createInitialData(DEFAULT_COLORS.high3),
         skills: { tabLabel: '成長タイムライン', themeColor: '#c084fc', updatedAt: null, fontSizes: {} }
       });
