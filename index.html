@@ -956,7 +956,7 @@
                 <div key={i} className={`relative flex items-center justify-center ${isExporting ? 'h-20' : 'h-20 sm:h-24'}`}>
                   {a ? (
                     <div className={`w-full h-full relative p-1 pt-4 rounded-lg border-2 flex flex-col items-center justify-center shadow-sm ${isExporting ? '' : 'overflow-hidden'} ${getMiniAbilityStyle(a.type)}`}>
-                       {!a.isOverflow && <span className={`absolute top-0 left-0 text-[10px] sm:text-xs font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-br-lg shadow-sm z-10 leading-none ${isExporting ? '-translate-y-2' : ''}`}>高{a.grade}</span>}
+                       {!a.isOverflow && <span className={`absolute top-0 left-0 ${isExporting ? 'text-xs sm:text-sm' : 'text-[10px] sm:text-xs'} font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-br-lg shadow-sm z-10 leading-none`}>高{a.grade}</span>}
                        <span className={`w-full text-center font-bold text-lg sm:text-xl leading-snug break-words px-1 pb-1 ${a.isOverflow ? '-mt-3 text-gray-600' : ''}`}>{a.name}</span>
                     </div>
                   ) : (
